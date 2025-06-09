@@ -1,0 +1,139 @@
+﻿@model Myisolve.Models.properties
+
+@{
+    ViewBag.Title = "Edit Employee";
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<h2>Edit Employee</h2>
+
+@using (Html.BeginForm("EditEmployee", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => m.EmployeeCode)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.BranchName, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.BranchName, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.BranchName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeName, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.EmployeeName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.MobileNumber1, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.MobileNumber1, new
+        {
+            @class = "form-control",
+            required = "required",
+            pattern = "[0-9]{10}",
+            title = "10 digit mobile number"
+        })
+        @Html.ValidationMessageFor(m => m.MobileNumber1, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.DepartmentName, new { @class = "control-label" })
+        @Html.DropDownListFor(m => m.DepartmentName,
+            new SelectList(new[] { "Manager", "Computer Science" }, Model.DepartmentName),
+            "-- Select Department --",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.DepartmentName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmployeeCode, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.EmployeeCode, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.DateOfJoin, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.DateOfJoin, "{0:yyyy-MM-dd}", new
+        {
+            @class = "form-control",
+            type = "date",
+            required = "required"
+        })
+        @Html.ValidationMessageFor(m => m.DateOfJoin, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.Email, new
+        {
+            @class = "form-control",
+            type = "email",
+            required = "required"
+        })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gender, new { @class = "control-label" })
+        @Html.DropDownListFor(m => m.Gender,
+            new SelectList(new[] { "Male", "Female" }, Model.Gender),
+            "-- Select --",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Role, new { @class = "control-label" })
+        @Html.DropDownListFor(m => m.Role,
+            new SelectList(new[] { "user", "Super" }, Model.Role),
+            "-- Select --",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Status, new { @class = "control-label" })
+        @Html.DropDownListFor(m => m.Status,
+            new SelectList(new[] { "active", "inactive" }, Model.Status),
+            "-- Select --",
+            new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save"></i> Update
+            </button>
+            <a href="@Url.Action("Employee", "Home")" class="btn btn-default">
+                <i class="fa fa-times"></i> Cancel
+            </a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            // Client-side validation enhancement
+            $('form').submit(function () {
+                if (!$(this).valid()) {
+                    $('.text-danger').show();
+                    return false;
+                }
+                return true;
+            });
+        });
+    </script>
+}
